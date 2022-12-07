@@ -31,6 +31,11 @@ var vb = vec4(0.0, 0.942809, 0.333333, 1);
 var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
 var vd = vec4(0.816497, -0.471405, 0.333333, 1);
 
+//Lights
+var lightX;
+var lightY;
+var lightZ;
+
 var lightPosition = vec4(1.0, 1.0, 1.0, 0.0);
 var lightPosition2 = vec4(-1.0, -1.0, -1.0, 0.0);
 var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0);
@@ -248,15 +253,27 @@ window.onload = function init() {
     gl.getUniformLocation(program, "specularProduct"),
     flatten(specularProduct)
   );
-  gl.uniform4fv(
-    gl.getUniformLocation(program, "lightPosition"),
-    flatten(lightPosition)
-  );
-  gl.uniform4fv(
-    gl.getUniformLocation(program, "lightPosition"),
-    flatten(lightPosition)
-  );
+  // gl.uniform4fv(
+  //   gl.getUniformLocation(program, "lightPosition"),
+  //   flatten(lightPosition)
+  // );
+  // gl.uniform4fv(
+  //   gl.getUniformLocation(program, "lightPosition"),
+  //   flatten(lightPosition)
+  // );
   gl.uniform1f(gl.getUniformLocation(program, "shininess"), materialShininess);
+
+   // Light
+   lightX = parseFloat(document.getElementById("LightX").value);
+   document.getElementById("ValueLX").innerHTML = lightX;
+
+   lightY = parseFloat(document.getElementById("LightY").value);
+   document.getElementById("ValueLY").innerHTML = lightY;
+
+   lightZ = parseFloat(document.getElementById("LightZ").value);
+   document.getElementById("ValueLZ").innerHTML = lightZ;
+
+   gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),flatten(vec4(lightX, lightY, lightZ, 0.0 )) );
 
   render();
 };

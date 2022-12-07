@@ -15,6 +15,10 @@ var theta = 0.0;
 var phi = 0.0;
 var dr = (5.0 * Math.PI) / 180.0;
 
+var  fovy= 140; 
+var  aspect = 1.0;  
+
+
 var left = -3.0;
 var right = 3.0;
 var ytop = 3.0;
@@ -219,7 +223,9 @@ window.onload = function init() {
     near -= 1.0;
     init();
   };
-
+  document.getElementById("fovSlider").onchange = function(event) {
+    fovy = event.target.value;
+};
   gl.uniform4fv(
     gl.getUniformLocation(program, "ambientProduct"),
     flatten(ambientProduct)
@@ -255,7 +261,8 @@ function render() {
   );
 
   modelViewMatrix = lookAt(eye, at, up);
-  projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+  //projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+  projectionMatrix = perspective(fovy, aspect, near, far);
   normalMatrix = [
     vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
     vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),

@@ -1,6 +1,6 @@
 var canvas;
 var gl;
-
+var decider = true;
 var numTimesToSubdivide = 3;
 
 var index = 0;
@@ -15,9 +15,8 @@ var theta = 0.0;
 var phi = 0.0;
 var dr = (5.0 * Math.PI) / 180.0;
 
-var  fovy= 140; 
-var  aspect = 1.0;  
-
+var fovy = 140;
+var aspect = 1.0;
 
 var left = -3.0;
 var right = 3.0;
@@ -43,7 +42,7 @@ var materialShininess = 20.0;
 var ctm;
 var ambientColor, diffuseColor, specularColor;
 
-var modelViewMatrix, projectionMatrix;
+var modelViewMatrix, projectionMatrix, projectionMatrix2;
 var modelViewMatrixLoc, projectionMatrixLoc;
 
 var normalMatrix, normalMatrixLoc;
@@ -223,9 +222,17 @@ window.onload = function init() {
     near -= 1.0;
     init();
   };
-  document.getElementById("fovSlider").onchange = function(event) {
+  document.getElementById("Button18").onclick = function () {
+    decider = true;
+    init();
+  };
+  document.getElementById("Button19").onclick = function () {
+    decider = false;
+    init();
+  };
+  document.getElementById("fovSlider").onchange = function (event) {
     fovy = event.target.value;
-};
+  };
   gl.uniform4fv(
     gl.getUniformLocation(program, "ambientProduct"),
     flatten(ambientProduct)
@@ -261,8 +268,8 @@ function render() {
   );
 
   modelViewMatrix = lookAt(eye, at, up);
-  //projectionMatrix = ortho(left, right, bottom, ytop, near, far);
   projectionMatrix = perspective(fovy, aspect, near, far);
+  projectionMatrix2 = ortho(left, right, bottom, ytop, near, far);
   normalMatrix = [
     vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
     vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
@@ -270,7 +277,14 @@ function render() {
   ];
 
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-  gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+  decider === true
+    ? gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix))
+    : gl.uniformMatrix4fv(
+        projectionMatrixLoc,
+        false,
+        flatten(projectionMatrix2)
+      );
+
   gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
   for (var i = 0; i < index; i += 3) gl.drawArrays(gl.TRIANGLES, i, 3);

@@ -10,6 +10,9 @@ var normalsArray = [];
 
 var near = -1; // -1 - 1 - 2
 var far = 1; //1
+//ortho
+var nearO = -10; // -1 - 1 - 2
+var farO = 10; //1
 var radius = 1.5;
 var theta = 0.0;
 var phi = 0.0;
@@ -269,7 +272,7 @@ function render() {
 
   modelViewMatrix = lookAt(eye, at, up);
   projectionMatrix = perspective(fovy, aspect, near, far);
-  projectionMatrix2 = ortho(left, right, bottom, ytop, near, far);
+  projectionMatrix2 = ortho(left, right, bottom, ytop, nearO, farO);
   normalMatrix = [
     vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
     vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
